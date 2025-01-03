@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -13,7 +15,8 @@ public class Main {
     static boolean STATUS = false;
     static String selectedDesign = "default";
     static String selectedColor = "dark";
-
+    static Boolean selectedHideStatus = false;
+    static Boolean selectedHideTitle = false;
 
 
     public static void main(String[] args) {
@@ -24,7 +27,7 @@ public class Main {
 
         JFrame frame = new JFrame("Ninjabrain Stream Overlay v1.0.0");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 250);
+        frame.setSize(400, 270);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
 
@@ -44,7 +47,7 @@ public class Main {
         JPanel designPanel = new JPanel(new BorderLayout(5, 5));
         JLabel designLabel = new JLabel("Design:");
         designLabel.setFont(new Font("Sans-Serif", Font.PLAIN, 14));
-        JComboBox<String> designDropdown = new JComboBox<>(new String[]{"Default"});
+        JComboBox<String> designDropdown = new JComboBox<>(new String[]{"Default", "Default, Hide when no Data in Bot"});
         designDropdown.setFont(new Font("Sans-Serif", Font.PLAIN, 14));
         designPanel.add(designLabel, BorderLayout.WEST);
         designPanel.add(designDropdown, BorderLayout.CENTER);
@@ -74,6 +77,28 @@ public class Main {
         });
         mainPanel.add(colorPanel);
         mainPanel.add(Box.createVerticalStrut(verticalSpacing));
+
+        JCheckBox checkBox = new JCheckBox("Hide overlay if no data in Ninjabrain Bot");
+        checkBox.setFont(new Font("Sans-Serif", Font.PLAIN, 14));
+        checkBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                selectedHideStatus = (e.getStateChange() == ItemEvent.SELECTED);
+            }
+        });
+        mainPanel.add(checkBox);
+
+        JCheckBox checkBox2 = new JCheckBox("Hide Amount of Eye Throws and Boat State");
+        checkBox2.setFont(new Font("Sans-Serif", Font.PLAIN, 14));
+        checkBox2.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                selectedHideTitle = (e.getStateChange() == ItemEvent.SELECTED);
+            }
+        });
+        mainPanel.add(checkBox2);
+        mainPanel.add(Box.createVerticalStrut(verticalSpacing));
+
 
         JPanel urlPanel = new JPanel(new BorderLayout(5, 5));
         JLabel urlLabel = new JLabel("URL:");

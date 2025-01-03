@@ -39,18 +39,29 @@ public class HTTPServer {
 
                         JSONObject jsonResponse = new JSONObject();
 
+
+
                         if (Main.STATUS) {
+
                             collectData.UpdateData();
-                            jsonResponse.put("distance", collectData.getDistance());
-                            jsonResponse.put("percent", collectData.getPercent());
-                            jsonResponse.put("isnether", collectData.getNether());
-                            jsonResponse.put("eyethrows", collectData.getEyethrows());
-                            jsonResponse.put("boat", collectData.getBoatstate());
-                            jsonResponse.put("x", collectData.getSHx());
-                            jsonResponse.put("z", collectData.getSHz());
+                            if(Main.selectedHideStatus && collectData.getEyethrows() == 0){
+                                jsonResponse.put("Ninjabrain", "offline");
+                            }else{
+                                jsonResponse.put("hidetitle", Main.selectedHideTitle);
+                                jsonResponse.put("distance", collectData.getDistance());
+                                jsonResponse.put("percent", collectData.getPercent());
+                                jsonResponse.put("isnether", collectData.getNether());
+                                jsonResponse.put("eyethrows", collectData.getEyethrows());
+                                jsonResponse.put("boat", collectData.getBoatstate());
+                                jsonResponse.put("x", collectData.getSHx());
+                                jsonResponse.put("z", collectData.getSHz());
+                            }
+
                         } else {
                             jsonResponse.put("Ninjabrain", "offline");
                         }
+
+
 
                         writer.println(jsonResponse.toString());
                     } else {
