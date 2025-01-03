@@ -3,6 +3,9 @@ package org.example;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class GetHTML {
     private String OverlayTheme;
@@ -12,26 +15,36 @@ public class GetHTML {
         this.OverlayTheme = theme;
     }
     public String GetNow(){
-        String filePath = "defaultDark.html";
+        String fileURL = "";
 
         if(OverlayTheme.equals("default") && ColorScheme.equals("dark")){
-            filePath = "src/main/resources/defaultDark.html";
+            fileURL = "https://streamoverlay.vercel.app/defaultDark.html";
         }else if(OverlayTheme.equals("default") && ColorScheme.equals("light")){
-            filePath = "src/main/resources/defaultLight.html";
+            fileURL = "https://streamoverlay.vercel.app/defaultLight.html";
         }else if(OverlayTheme.equals("default") && ColorScheme.equals("transparent")){
-            filePath = "src/main/resources/defaultTransparent.html";
+            fileURL = "https://streamoverlay.vercel.app/defaultTransparent.html";
         }else {
             return "<h1>Select valid theme</h1>";
         }
 
         StringBuilder content = new StringBuilder();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try {
+            URL url = new URL(fileURL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line;
-            while ((line = br.readLine()) != null) {
+
+            while ((line = reader.readLine()) != null) {
                 content.append(line).append("\n");
             }
-        } catch (IOException e) {
+
+            reader.close();
+            connection.disconnect();
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
