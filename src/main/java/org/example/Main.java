@@ -47,7 +47,7 @@ public class Main {
         JPanel designPanel = new JPanel(new BorderLayout(5, 5));
         JLabel designLabel = new JLabel("Design:");
         designLabel.setFont(new Font("Sans-Serif", Font.PLAIN, 14));
-        JComboBox<String> designDropdown = new JComboBox<>(new String[]{"Default", "Default, Hide when no Data in Bot"});
+        JComboBox<String> designDropdown = new JComboBox<>(new String[]{"Default"});
         designDropdown.setFont(new Font("Sans-Serif", Font.PLAIN, 14));
         designPanel.add(designLabel, BorderLayout.WEST);
         designPanel.add(designDropdown, BorderLayout.CENTER);
@@ -93,11 +93,19 @@ public class Main {
         checkBox2.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    // Ensure the first checkbox is selected and not disabled
+                    checkBox.setSelected(true);
+                    checkBox.setEnabled(false); // Make the first checkbox not clickable
+                } else {
+                    // Re-enable the first checkbox if the second is deselected
+                    checkBox.setEnabled(true);
+                }
                 selectedHideTitle = (e.getStateChange() == ItemEvent.SELECTED);
             }
         });
         mainPanel.add(checkBox2);
-        mainPanel.add(Box.createVerticalStrut(verticalSpacing));
+
 
 
         JPanel urlPanel = new JPanel(new BorderLayout(5, 5));
