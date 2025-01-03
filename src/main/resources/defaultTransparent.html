@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ninjabrainbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<div class="p-4 rounded-lg w-fit" id="root">
+    <div class="flex justify-between gap-4 items-center ml-2 mr-2">
+        <img
+                src="https://streamoverlay.vercel.app/Eye_of_Ender.png"
+                width="64"
+        />
+        <span
+                class="text-4xl font-bold text-white absolute ml-10 mt-8"
+                id="eyes"
+        >
+          0
+        </span>
+
+        <div class="w-2 h-16 bg-neutral-500 rounded-sm object-contain"></div>
+        <img
+                src="https://streamoverlay.vercel.app/boat_gray.png"
+                id="boat"
+                width="64"
+        />
+    </div>
+    <div id="datasection">
+        <div class="h-8"></div>
+        <div class="flex gap-8">
+            <div class="flex flex-col">
+                <span class="text-gray-200 text-2xl">%</span>
+                <span class="text-white pt-0 text-3xl" id="percent">00.0%</span>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-gray-200 text-2xl">Dist.</span>
+                <span class="text-white text-3xl" id="dist">0000</span>
+            </div>
+        </div>
+        <div class="flex gap-4 mt-2">
+            <div class="flex flex-col">
+                <span class="text-gray-200 text-2xl" id="loc">Location</span>
+                <div class="flex gap-4">
+                    <span class="text-white text-3xl" id="x">0000</span>
+                    <span class="text-white text-3xl" id="z">0000</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+      async function fetchData() {
+        try {
+          const response = await fetch("http://localhost:787/api/getData", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Fehler beim API-Aufruf: " + response.statusText);
+          }
+
+          const data = await response.json();
+
+          if (data.Ninjabrain === "offline") {
+            document.getElementById("root").style.display = "none";
+          } else {
+            document.getElementById("root").style.display = "block";
+
+            document.getElementById("eyes").innerHTML = data.eyethrows;
+            document.getElementById("dist").innerHTML = data.distance;
+
+            if (data.distance == 0) {
+              document.getElementById("datasection").style.display = "none";
+            } else {
+              document.getElementById("datasection").style.display = "block";
+            }
+
+            document.getElementById("percent").innerHTML = data.percent + "%";
+            if (data.percent > 80) {
+              document.getElementById("percent").classList =
+                "text-green-600 pt-0 text-3xl";
+            } else if (data.percent > 60) {
+              document.getElementById("percent").classList =
+                "text-[#9CF100] pt-0 text-3xl";
+            } else if (data.percent > 40) {
+              document.getElementById("percent").classList =
+                "text-yellow-500 pt-0 text-3xl";
+            } else if (data.percent > 20) {
+              document.getElementById("percent").classList =
+                "text-orange-600 pt-0 text-3xl";
+            } else if (data.percent > 0) {
+              document.getElementById("percent").classList =
+                "text-red-600 pt-0 text-3xl";
+            } else {
+              document.getElementById("percent").classList =
+                "text-white pt-0 text-3xl";
+            }
+            document.getElementById("x").innerHTML = data.x;
+            if (data.x < 0) {
+              document.getElementById("x").classList = "text-red-600 text-3xl";
+            } else {
+              document.getElementById("x").classList = "text-white text-3xl";
+            }
+            document.getElementById("z").innerHTML = data.z;
+            if (data.z < 0) {
+              document.getElementById("z").classList = "text-red-600 text-3xl";
+            } else {
+              document.getElementById("z").classList = "text-white text-3xl";
+            }
+
+            if (data.boat == 0) {
+              document.getElementById("boat").src =
+                "https://streamoverlay.vercel.app/boat_gray.png";
+            } else if (data.boat == 1) {
+              document.getElementById("boat").src =
+                "https://streamoverlay.vercel.app/boat_blue.png";
+            } else if (data.boat == 2) {
+              document.getElementById("boat").src =
+                "https://streamoverlay.vercel.app/boat_green.png";
+            } else if (data.boat == 3) {
+              document.getElementById("boat").src =
+                "https://streamoverlay.vercel.app/boat_red.png";
+            }
+            if (data.isnether == true) {
+              document.getElementById("loc").innerHTML = "Location (Nether)";
+            } else {
+              document.getElementById("loc").innerHTML = "Location";
+            }
+          }
+        } catch (error) {
+          console.error("Fehler:", error);
+        }
+      }
+
+      setInterval(fetchData, 500);
+    </script>
+</body>
+</html>

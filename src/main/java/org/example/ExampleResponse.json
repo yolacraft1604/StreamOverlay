@@ -1,0 +1,29 @@
+{
+  "eyeThrows": [
+    {
+      "xInOverworld": -1331.4,
+      "angleWithoutCorrection": -12.980173228711509,
+      "zInOverworld": 566.01,
+      "angle": -12.964820271523369,
+      "correction": 0.015352957188140793,
+      "error": 0.0010843144490380041,
+      "type": "BOAT"
+    }
+  ],
+  "resultType": "TRIANGULATION",
+  "playerPosition": {
+    "xInOverworld": -1331.4,
+    "isInOverworld": true,
+    "isInNether": false,
+    "horizontalAngle": -12.98,
+    "zInOverworld": 566.01
+  },
+  "predictions": [
+    {
+      "overworldDistance": 259.9616896775369,
+      "certainty": 0.9999999996458467,
+      "chunkX": -80,
+      "chunkZ": 51
+    }
+  ]
+}
